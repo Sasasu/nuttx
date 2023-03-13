@@ -63,8 +63,23 @@ void rp2040_boardearlyinitialize(void)
 
   /* --- Place any board specific early initialization here --- */
 
-  /* Set board LED pin */
+  {
+    // enable the main power input
+    rp2040_gpio_init(BOARD_GPIO_POWER_EN);
+    rp2040_gpio_init(BOARD_GPIO_SW_1);
 
+    rp2040_gpio_set_slew_fast(BOARD_GPIO_LED_PIN, true);
+    rp2040_gpio_set_drive_strength(BOARD_GPIO_POWER_EN, RP2040_PADS_BANK0_GPIO_DRIVE_12MA);
+
+    rp2040_gpio_setdir(BOARD_GPIO_POWER_EN, true);
+
+    rp2040_gpio_setdir(BOARD_GPIO_SW_1, false);
+    rp2040_gpio_setdir(BOARD_GPIO_SW_2, false);
+
+    rp2040_gpio_put(BOARD_GPIO_POWER_EN, true);
+  }
+
+  /* Set board LED pin */
   rp2040_gpio_init(BOARD_GPIO_LED_PIN);
   rp2040_gpio_setdir(BOARD_GPIO_LED_PIN, true);
   rp2040_gpio_put(BOARD_GPIO_LED_PIN, true);

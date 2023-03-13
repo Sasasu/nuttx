@@ -41,21 +41,6 @@
 
 #if defined(CONFIG_DEV_GPIO) && !defined(CONFIG_GPIO_LOWER_HALF)
 
-/* Output pins. GPIO25 is onboard LED any other outputs could be used.
- */
-
-#define GPIO_OUT1     25
-
-/* Input pins.
- */
-
-#define GPIO_IN1      6
-
-/* Interrupt pins.
- */
-
-#define GPIO_IRQPIN1  14
-
 /****************************************************************************
  * Private Types
  ****************************************************************************/
@@ -109,7 +94,7 @@ static const struct gpio_operations_s gpout_ops =
 
 static const uint32_t g_gpiooutputs[BOARD_NGPIOOUT] =
 {
-  GPIO_OUT1
+  BOARD_GPIO_POWER_EN, BOARD_GPIO_LED_PIN,
 };
 
 static struct rp2040gpio_dev_s g_gpout[BOARD_NGPIOOUT];
@@ -128,7 +113,7 @@ static const struct gpio_operations_s gpin_ops =
 
 static const uint32_t g_gpioinputs[BOARD_NGPIOIN] =
 {
-  GPIO_IN1
+  BOARD_GPIO_SW_1, BOARD_GPIO_SW_2,
 };
 
 static struct rp2040gpio_dev_s g_gpin[BOARD_NGPIOIN];
@@ -147,7 +132,6 @@ static const struct gpio_operations_s gpint_ops =
 
 static const uint32_t g_gpiointinputs[BOARD_NGPIOINT] =
 {
-  GPIO_IRQPIN1,
 };
 
 static struct rp2040gpint_dev_s g_gpint[BOARD_NGPIOINT];

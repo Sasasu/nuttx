@@ -63,9 +63,13 @@
 /* GPIO definitions *********************************************************/
 
 #define BOARD_GPIO_LED_PIN      25
-#define BOARD_NGPIOOUT          1
-#define BOARD_NGPIOIN           1
-#define BOARD_NGPIOINT          1
+#define BOARD_NGPIOOUT          2
+#define BOARD_NGPIOIN           2
+#define BOARD_NGPIOINT          0
+
+#define BOARD_GPIO_POWER_EN 0
+#define BOARD_GPIO_SW_1     1
+#define BOARD_GPIO_SW_2     2
 
 /****************************************************************************
  * Public Types
