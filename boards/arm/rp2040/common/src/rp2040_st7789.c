@@ -46,8 +46,8 @@
 
 #if LCD_SPI_PORTNO
 #define LCD_DC         CONFIG_RP2040_SPI1_RX_GPIO
-#define LCD_RST        12
-#define LCD_BL         13
+#define LCD_RST        13
+#define LCD_BL         12
 #else
 #define LCD_DC         CONFIG_RP2040_SPI0_RX_GPIO
 #endif
