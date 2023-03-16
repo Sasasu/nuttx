@@ -75,6 +75,7 @@ static int gpint_read(struct gpio_dev_s *dev, bool *value);
 static int gpint_attach(struct gpio_dev_s *dev,
                         pin_interrupt_t callback);
 static int gpint_enable(struct gpio_dev_s *dev, bool enable);
+static int gpint_setpintype(struct gpio_dev_s *dev, enum gpio_pintype_e pintype);
 #endif
 
 /****************************************************************************
@@ -126,6 +127,7 @@ static const struct gpio_operations_s gpint_ops =
   .go_write  = NULL,
   .go_attach = gpint_attach,
   .go_enable = gpint_enable,
+  .go_setpintype = gpint_setpintype,
 };
 
 /* This array maps the GPIO pins used as INTERRUPT INPUTS */
@@ -260,6 +262,81 @@ static int gpint_attach(struct gpio_dev_s *dev,
 
   gpioinfo("Attach %p\n", callback);
   rp2040gpint->callback = callback;
+  return OK;
+}
+
+static int gpint_setpintype(FAR struct gpio_dev_s *dev,
+                            enum gpio_pintype_e pintype)
+{
+  struct rp2040gpio_dev_s *rp2040gpio =
+    (struct rp2040gpio_dev_s *)dev;
+
+  DEBUGASSERT(rp2040gpio != NULL);
+  DEBUGASSERT(rp2040gpio->id < BOARD_NGPIOOUT);
+
+  switch(pintype) {
+    case GPIO_INPUT_PIN:
+      rp2040_gpio_disable_irq(rp2040gpio->id);
+      rp2040_gpio_setdir(rp2040gpio->id, true);
+      break;
+    case GPIO_INPUT_PIN_PULLUP:
+      rp2040_gpio_disable_irq(rp2040gpio->id);
+      rp2040_gpio_setdir(rp2040gpio->id, true);
+      rp2040_gpio_set_pulls(rp2040gpio->id, true, false);
+      break;
+    case GPIO_INPUT_PIN_PULLDOWN:
+      rp2040_gpio_disable_irq(rp2040gpio->id);
+      rp2040_gpio_setdir(rp2040gpio->id, false);
+      rp2040_gpio_set_pulls(rp2040gpio->id, false, true);
+      break;
+    case GPIO_OUTPUT_PIN:
+      rp2040_gpio_disable_irq(rp2040gpio->id);
+      rp2040_gpio_setdir(rp2040gpio->id, false);
+      rp2040_gpio_set_pulls(rp2040gpio->id, false, false);
+      break;
+    case GPIO_OUTPUT_PIN_OPENDRAIN:
+      rp2040_gpio_disable_irq(rp2040gpio->id);
+      rp2040_gpio_setdir(rp2040gpio->id, false);
+      rp2040_gpio_set_pulls(rp2040gpio->id, true, false);
+      break;
+
+    case GPIO_INTERRUPT_PIN:
+      rp2040_gpio_enable_irq(rp2040gpio->id);
+      rp2040_gpio_setdir(rp2040gpio->id, true);
+      rp2040_gpio_set_pulls(rp2040gpio->id, false, false);
+      break;
+    case GPIO_INTERRUPT_HIGH_PIN:
+      rp2040_gpio_enable_irq(rp2040gpio->id);
+      rp2040_gpio_setdir(rp2040gpio->id, true);
+      rp2040_gpio_set_pulls(rp2040gpio->id, false, true);
+      break;
+    case GPIO_INTERRUPT_LOW_PIN:
+      rp2040_gpio_enable_irq(rp2040gpio->id);
+      rp2040_gpio_setdir(rp2040gpio->id, true);
+      rp2040_gpio_set_pulls(rp2040gpio->id, true, false);
+      break;
+    case GPIO_INTERRUPT_RISING_PIN:
+      rp2040_gpio_enable_irq(rp2040gpio->id);
+      rp2040_gpio_setdir(rp2040gpio->id, true);
+      rp2040_gpio_set_pulls(rp2040gpio->id, false, false);
+      break;
+    case GPIO_INTERRUPT_FALLING_PIN:
+      rp2040_gpio_enable_irq(rp2040gpio->id);
+      rp2040_gpio_setdir(rp2040gpio->id, true);
+      rp2040_gpio_set_pulls(rp2040gpio->id, true, false);
+      break;
+    case GPIO_INTERRUPT_BOTH_PIN:
+      rp2040_gpio_enable_irq(rp2040gpio->id);
+      rp2040_gpio_setdir(rp2040gpio->id, true);
+      rp2040_gpio_set_pulls(rp2040gpio->id, false, false);
+      break;
+
+    case GPIO_NPINTYPES:
+    default:
+      set_errno(EINVAL);
+      return ERROR;
+  }
+
   return OK;
 }
 
