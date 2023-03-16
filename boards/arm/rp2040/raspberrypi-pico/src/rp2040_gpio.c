@@ -321,7 +321,11 @@ int rp2040_dev_gpio_init(void)
 
       rp2040_gpio_init(g_gpiooutputs[i]);
       rp2040_gpio_setdir(g_gpiooutputs[i], true);
-      rp2040_gpio_put(g_gpiooutputs[i], false);
+      if (g_gpiooutputs[i] == BOARD_GPIO_POWER_EN) { // do not turn off power en
+        rp2040_gpio_put(g_gpiooutputs[i], true);
+      } else {
+        rp2040_gpio_put(g_gpiooutputs[i], false);
+      }
 
       pincount++;
     }
