@@ -504,14 +504,16 @@ static void st7789_fill(FAR struct st7789_dev_s *dev, uint16_t color)
 {
   int i;
 
+  memset(dev->runbuffer, ((uint)color << 16) + color, sizeof(dev->runbuffer));
+
   st7789_setarea(dev, 0, 0, ST7789_XRES - 1, ST7789_YRES - 1);
 
   st7789_sendcmd(dev, ST7789_RAMWR);
   st7789_select(dev->spi, ST7789_BYTESPP *8);
 
-  for (i = 0; i < ST7789_XRES * ST7789_YRES; i++)
+  for (i = 0; i < ST7789_XRES; i++)
     {
-      SPI_SEND(dev->spi, color);
+      SPI_SNDBLOCK(dev->spi, dev->runbuffer, sizeof(dev->runbuffer)/ST7789_BYTESPP);
     }
 
   st7789_deselect(dev->spi);
