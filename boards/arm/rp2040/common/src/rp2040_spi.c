@@ -97,7 +97,7 @@ int rp2040_spi0cmddata(struct spi_dev_s *dev, uint32_t devid, bool cmd)
        *  data bits are data or a command.
        */
 
-      rp2040_gpio_put(CONFIG_RP2040_SPI0_RX_GPIO, !cmd);
+      rp2040_gpio_put(12, !cmd);
 
       return OK;
     }
@@ -138,7 +138,7 @@ int rp2040_spi1cmddata(struct spi_dev_s *dev, uint32_t devid, bool cmd)
        *  data bits are data or a command.
        */
 
-      rp2040_gpio_put(CONFIG_RP2040_SPI1_RX_GPIO, !cmd);
+      rp2040_gpio_put(12, !cmd);
 
       return OK;
     }
