@@ -464,6 +464,9 @@ static void my_reset(struct adc_dev_s *dev)
     {
       a_gpio = g_gpio_map[i];
 
+      if (i == 2 || i == 3)
+          continue;
+
       if (a_gpio >= 0)
         {
           rp2040_gpio_setdir(a_gpio, false);
