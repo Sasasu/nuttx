@@ -261,6 +261,14 @@ int my_wdt_ioctl(struct watchdog_lowerhalf_s *lower,
  * Name: rp2040_wdt_init
  ****************************************************************************/
 
+int rp2040_wdt_xxxx(void) {
+  watchdog_lowerhalf_t *lower = &g_rp2040_watchdog_lowerhalf;
+  modreg32(0, RP2040_WATCHDOG_CTRL_ENABLE, RP2040_WATCHDOG_CTRL);
+  my_wdt_settimeout((struct watchdog_lowerhalf_s*)lower, 1000);
+  my_wdt_start((struct watchdog_lowerhalf_s*)lower);
+  return 0;
+}
+
 int rp2040_wdt_init(void)
 {
   watchdog_lowerhalf_t *lower = &g_rp2040_watchdog_lowerhalf;

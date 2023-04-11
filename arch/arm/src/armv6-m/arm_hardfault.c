@@ -121,5 +121,12 @@ int arm_hardfault(int irq, void *context, void *arg)
   up_irq_save();
   hfalert("PANIC!!! Hard fault\n");
   PANIC();
+
+#define putreg32(v,a)  (*(volatile uint32_t *)(a) = (v))
+#define RP2040_SIO_BASE                  0xd0000000  /* Single-cycle IO block Provides core-local and inter-core hardware for the two processors, with single-cycle access. */
+#define RP2040_SIO_GPIO_OUT_CLR_OFFSET        0x000018  /* GPIO output value clear */
+#define RP2040_SIO_GPIO_OUT_CLR        (RP2040_SIO_BASE + RP2040_SIO_GPIO_OUT_CLR_OFFSET)
+putreg32(1 << 0, RP2040_SIO_GPIO_OUT_CLR);
+
   return OK; /* Won't get here */
 }

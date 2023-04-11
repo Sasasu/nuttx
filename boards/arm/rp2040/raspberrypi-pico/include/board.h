@@ -46,12 +46,12 @@
 #define MHZ                     1000000
 
 #define BOARD_XOSC_FREQ         (12 * MHZ)
-#define BOARD_PLL_SYS_FREQ      (125 * MHZ)
+#define BOARD_PLL_SYS_FREQ      (300 * MHZ)
 #define BOARD_PLL_USB_FREQ      (48 * MHZ)
 
 #define BOARD_REF_FREQ          (12 * MHZ)
-#define BOARD_SYS_FREQ          (125 * MHZ)
-#define BOARD_PERI_FREQ         (125 * MHZ)
+#define BOARD_SYS_FREQ          (300 * MHZ)
+#define BOARD_PERI_FREQ         (300 * MHZ)
 #define BOARD_USB_FREQ          (48 * MHZ)
 #define BOARD_ADC_FREQ          (48 * MHZ)
 #define BOARD_RTC_FREQ          46875

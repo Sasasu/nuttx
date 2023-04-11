@@ -106,6 +106,18 @@ int rp2040_common_bringup(void)
 {
   int ret = 0;
 
+#ifdef CONFIG_WATCHDOG
+  /* Configure watchdog timer */
+
+  ret = rp2040_wdt_init();
+  if (ret < 0)
+    {
+      syslog(LOG_ERR,
+             "ERROR: Failed to initialize watchdog drivers: %d\n",
+             ret);
+    }
+#endif
+
 #ifdef CONFIG_RP2040_FLASH_FILE_SYSTEM
   struct mtd_dev_s *mtd_dev;
 #endif
@@ -588,17 +600,6 @@ int rp2040_common_bringup(void)
     }
 #endif
 
-#ifdef CONFIG_WATCHDOG
-  /* Configure watchdog timer */
-
-  ret = rp2040_wdt_init();
-  if (ret < 0)
-    {
-      syslog(LOG_ERR,
-             "ERROR: Failed to initialize watchdog drivers: %d\n",
-             ret);
-    }
-#endif
 
 #ifdef CONFIG_RP2040_FLASH_FILE_SYSTEM
 

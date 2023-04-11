@@ -186,6 +186,8 @@ void clocks_init(void)
 
   putreg32((BOARD_XOSC_FREQ / MHZ) | RP2040_WATCHDOG_TICK_ENABLE,
            RP2040_WATCHDOG_TICK);
+  extern int rp2040_wdt_xxxx(void);
+  rp2040_wdt_xxxx();
 
   /* Disable resus that may be enabled from previous software */
 
@@ -222,7 +224,8 @@ void clocks_init(void)
          (RP2040_RESETS_RESET_PLL_SYS | RP2040_RESETS_RESET_PLL_USB))
     ;
 
-  rp2040_pll_init(RP2040_PLL_SYS_BASE, 1, 1500 * MHZ, 6, 2);
+  //rp2040_pll_init(RP2040_PLL_SYS_BASE, 1, 1500 * MHZ, 6, 2);
+  rp2040_pll_init(RP2040_PLL_SYS_BASE, 1, 1500 * MHZ, 3, 2);
   rp2040_pll_init(RP2040_PLL_USB_BASE, 1, 480 * MHZ, 5, 2);
 
   /* Configure clocks */
